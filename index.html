@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Resource Allocation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>🏥 Hospital</h2>
+        <p class="sidebar-subtitle">Resource Allocation</p>
+
+        <a href="#" class="menu-link active" data-page="dashboard">Dashboard</a>
+        <a href="#" class="menu-link" data-page="register">Register Patient</a>
+        <a href="#" class="menu-link" data-page="patients">Patient Records</a>
+        <a href="#" class="menu-link" data-page="beds">Bed Management</a>
+        <a href="#" class="menu-link" data-page="history">Allocation History</a>
+        <a href="#" class="menu-link" data-page="reports">Reports</a>
+    </aside>
+
+    <main class="main-content">
+
+        <header>
+            <h1 id="pageTitle">Dashboard</h1>
+            <p>Government Hospital Resource Allocation System</p>
+        </header>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active-page">
+            <h2>Dashboard Overview</h2>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Total Patients</p>
+                    <h2 id="totalPatients">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Beds</p>
+                    <h2 id="totalBeds">13</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Available Beds</p>
+                    <h2 id="availableBeds">13</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Occupied Beds</p>
+                    <h2 id="occupiedBeds">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Waiting Patients</p>
+                    <h2 id="waitingPatients">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Admitted Patients</p>
+                    <h2 id="admittedPatients">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Discharged Patients</p>
+                    <h2 id="dischargedPatients">0</h2>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>System Information</h3>
+                <p>Register patients, manage beds, discharge patients and view reports.</p>
+                <p class="note">Patient information is stored in the hospital database.</p>
+            </div>
+        </section>
+
+        <!-- REGISTER PATIENT -->
+        <section id="register" class="page panel">
+            <h2>Register Patient</h2>
+
+            <form id="patientForm">
+                <label for="patientId">Patient ID</label>
+                <input type="number" id="patientId" name="patientId"
+                       placeholder="Enter Patient ID" min="1" required>
+
+                <label for="patientName">Patient Name</label>
+                <input type="text" id="patientName" name="patientName"
+                       placeholder="Enter patient name" required>
+
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age"
+                       min="1" max="120" required>
+
+                <label for="healthIssue">Health Issue</label>
+                <select id="healthIssue" name="healthIssue" required>
+                    <option value="">Select health issue</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+
+                <button type="submit">Register Patient</button>
+                <p id="message" role="status"></p>
+            </form>
+        </section>
+
+        <!-- MULTIPLE REGISTRATION -->
+        <section id="bulkRegister" class="page panel">
+            <h2>Multiple Patient Registration</h2>
+            <p>Register multiple patients one after another.</p>
+            <button type="button" id="goToRegister">Open Patient Registration</button>
+        </section>
+
+        <!-- PATIENT RECORDS -->
+        <section id="patients" class="page panel">
+            <h2>Patient Records</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Health Issue</th>
+                            <th>Priority</th>
+                            <th>Bed</th>
+                            <th>Status</th>
+                            <th>Admission Date</th>
+                            <th>Discharge Date</th>
+                            <th>Days Stayed</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="patientTable">
+                        <tr><td colspan="11">Loading patient records...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- BED MANAGEMENT -->
+        <section id="beds" class="page panel">
+            <h2>Bed Management</h2>
+            <p>10 Normal Beds and 3 Buffer Beds</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Normal Beds</p>
+                    <h2 id="normalBeds">10</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Buffer Beds</p>
+                    <h2 id="bufferBeds">3</h2>
+                </div>
+            </div>
+
+            <h3>Bed Availability</h3>
+            <div id="bedList" class="bed-grid"></div>
+
+            <div id="bedDetails" class="bed-details" style="display:none;"></div>
+        </section>
+
+        <!-- BED DETAILS -->
+        <section id="bedDetailsPage" class="page panel">
+            <button type="button" id="backToBeds">← Back to Bed Management</button>
+            <h2 id="selectedBedTitle">Bed Details</h2>
+            <div id="selectedBedDetails">Select a bed to view patient details.</div>
+        </section>
+
+        <!-- ALLOCATION HISTORY -->
+        <section id="history" class="page panel">
+            <h2>Allocation History</h2>
+            <ul id="historyList" class="history-list">
+                <li>No allocation history available</li>
+            </ul>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="reports" class="page panel">
+            <h2>Hospital Reports</h2>
+
+            <div class="stats">
+
+                <div class="stat-card report-clickable"
+                     data-report-status="All" role="button" tabindex="0">
+                    <p>Total Registered</p>
+                    <h2 id="reportTotal">0</h2>
+                </div>
+
+                <div class="stat-card report-clickable"
+                     data-report-status="Allocated" role="button" tabindex="0">
+                    <p>Currently Admitted</p>
+                    <h2 id="reportAdmitted">0</h2>
+                </div>
+
+                <div class="stat-card report-clickable"
+                     data-report-status="Waiting" role="button" tabindex="0">
+                    <p>Waiting</p>
+                    <h2 id="reportWaiting">0</h2>
+                </div>
+
+                <div class="stat-card report-clickable"
+                     data-report-status="Discharged" role="button" tabindex="0">
+                    <p>Discharged</p>
+                    <h2 id="reportDischarged">0</h2>
+                </div>
+
+            </div>
+
+            <!-- REPORT DETAILS: hidden until a card is clicked -->
+            <div id="reportPatientDetails" class="panel"
+                 style="display:none; margin-top:20px;">
+
+                <h3 id="reportTableTitle">Patient Details</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Health Issue</th>
+                                <th>Priority</th>
+                                <th>Bed</th>
+                                <th>Status</th>
+                                <th>Admission Date</th>
+                                <th>Discharge Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="reportPatientTable">
+                            <tr>
+                                <td colspan="9">Select a report card to view patients.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- HEALTH ISSUE REPORT -->
+            <h3>Health Issue-wise Report</h3>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Health Issue</th>
+                            <th>Number of Patients</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="healthReportTable">
+                        <tr><td colspan="2">Report will appear here</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- DATE-WISE REPORT -->
+            <h3>Date-wise Report</h3>
+
+            <label for="reportDate">Select Date</label>
+            <input type="date" id="reportDate">
+
+            <button type="button" id="dailyReportBtn">View Daily Report</button>
+            <div id="dailyReportResult" role="status"></div>
+
+            <button type="button" id="refreshReports">Refresh Reports</button>
+        </section>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
